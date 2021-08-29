@@ -44,9 +44,9 @@ jobs:
           name: build
           path: |
             heaptrack*.7z
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        if: github.ref == 'refs/heads/master' && github.repository == 'jtanx/heaptrack_win' && github.event_name == 'push'
-        with:
-          files: heaptrack*.7z
-          tag_name: continuous
+      # - name: Release
+      #   uses: softprops/action-gh-release@v1
+      #   if: github.ref == 'refs/heads/master' && github.repository == 'jtanx/heaptrack_win' && github.event_name == 'push'
+      #   with:
+      #     files: heaptrack*.7z
+      #     tag_name: continuous
