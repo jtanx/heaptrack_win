@@ -1,0 +1,52 @@
+name: Build
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    env:
+      MSYS2_FC_CACHE_SKIP: true
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          submodules: true
+      - name: Setup MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: >-
+            git
+            mingw-w64-x86_64-boost
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-extra-cmake-modules
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-icoutils
+            mingw-w64-x86_64-kio-qt5
+            mingw-w64-x86_64-kitemmodels-qt5
+            mingw-w64-x86_64-ninja
+            mingw-w64-x86_64-ntldd
+            mingw-w64-x86_64-threadweaver-qt5
+            mingw-w64-x86_64-zstd
+            p7zip
+      - name: Build
+        shell: msys2 {0}
+        run: ./build.sh
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: |
+            heaptrack*.7z
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: github.ref == 'refs/heads/master' && github.repository == 'jtanx/heaptrack_win' && github.event_name == 'push'
+        with:
+          files: heaptrack*.7z
+          tag_name: continuous

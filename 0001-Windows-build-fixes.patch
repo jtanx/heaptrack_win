@@ -1,0 +1,67 @@
+From 257af915404a47f6d09afb1a34e28df36f9c7587 Mon Sep 17 00:00:00 2001
+From: Jeremy Tan <jtanx@outlook.com>
+Date: Sun, 29 Aug 2021 17:01:21 +1000
+Subject: [PATCH 1/2] Windows build fixes
+
+---
+ 3rdparty/CMakeLists.txt        | 4 ----
+ src/analyze/CMakeLists.txt     | 6 ------
+ src/analyze/gui/CMakeLists.txt | 6 +++++-
+ 3 files changed, 5 insertions(+), 11 deletions(-)
+
+diff --git a/3rdparty/CMakeLists.txt b/3rdparty/CMakeLists.txt
+index 4ac3458..7db463b 100644
+--- a/3rdparty/CMakeLists.txt
++++ b/3rdparty/CMakeLists.txt
+@@ -5,7 +5,3 @@ endif()
+ if (HEAPTRACK_BUILD_BACKTRACE)
+     add_subdirectory(libbacktrace)
+ endif()
+-
+-if (ZSTD_FOUND)
+-    add_subdirectory(boost-zstd)
+-endif()
+diff --git a/src/analyze/CMakeLists.txt b/src/analyze/CMakeLists.txt
+index cdfa9e3..bf425b9 100644
+--- a/src/analyze/CMakeLists.txt
++++ b/src/analyze/CMakeLists.txt
+@@ -23,12 +23,6 @@ target_link_libraries(sharedprint LINK_PUBLIC
+     ${ZLIB_LIBRARIES}
+ )
+ 
+-if (ZSTD_FOUND)
+-    target_link_libraries(sharedprint LINK_PUBLIC
+-        boost-zstd
+-    )
+-endif()
+-
+ add_subdirectory(print)
+ 
+ if(HEAPTRACK_BUILD_GUI)
+diff --git a/src/analyze/gui/CMakeLists.txt b/src/analyze/gui/CMakeLists.txt
+index e7fc8f9..130fdce 100644
+--- a/src/analyze/gui/CMakeLists.txt
++++ b/src/analyze/gui/CMakeLists.txt
+@@ -17,7 +17,7 @@ include(ECMAddAppIcon)
+ 
+ configure_file(gui_config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/gui_config.h)
+ 
+-add_definitions(-Wall
++add_definitions(
+     -DQT_NO_URL_CAST_FROM_STRING
+     -DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII
+     -DQT_NO_CAST_FROM_BYTEARRAY
+@@ -93,6 +93,10 @@ add_executable(heaptrack_gui
+     ${UIFILES}
+ )
+ 
++target_compile_options(heaptrack_gui
++    PRIVATE -Wall
++)
++
+ target_link_libraries(heaptrack_gui
+     ${LIBRARIES}
+ )
+-- 
+2.33.0
+

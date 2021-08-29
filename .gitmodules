@@ -1,0 +1,6 @@
+[submodule "kdiagram"]
+	path = kdiagram
+	url = https://github.com/KDE/kdiagram
+[submodule "heaptrack"]
+	path = heaptrack
+	url = https://github.com/KDE/heaptrack
