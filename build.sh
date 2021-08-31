@@ -7,8 +7,7 @@ HTVERSION="$(git -C heaptrack describe)"
 echo "HEAPTRACK VERSION $HTVERSION"
 
 # Patch heaptrack
-git -C heaptrack/ apply ../0001-Windows-build-fixes.patch
-git -C heaptrack/ apply ../0002-Add-path-relocation.patch
+git -C heaptrack/ apply ../0001-Add-path-relocation.patch
 
 # Install kdiagram/kchart
 cmake -S kdiagram -B kdbuild -GNinja -DCMAKE_INSTALL_PREFIX=/d/heaptrack -DCMAKE_BUILD_TYPE=Release

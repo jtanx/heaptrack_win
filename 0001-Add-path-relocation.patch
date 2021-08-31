@@ -1,7 +1,7 @@
-From 483c705175835bd86009172943565ebd44b530ae Mon Sep 17 00:00:00 2001
+From e95f8e9db2c4e85fec15db4ac14fbae56fca61c9 Mon Sep 17 00:00:00 2001
 From: Jeremy Tan <jtanx@outlook.com>
 Date: Sun, 29 Aug 2021 22:03:27 +1000
-Subject: [PATCH 2/2] Add path relocation
+Subject: [PATCH] Add path relocation
 
 ---
  src/analyze/gui/mainwindow.cpp | 56 +++++++++++++++++++++++++++++-----
