@@ -1,0 +1,72 @@
+From 9828f220c016558b31e4a88f9d3852f05c281c6c Mon Sep 17 00:00:00 2001
+From: Jeremy Tan <jtanx@outlook.com>
+Date: Thu, 11 Dec 2025 20:18:01 +1100
+Subject: [PATCH 1/2] Fix usage of nonstandard uint type
+
+
+diff --git a/src/analyze/gui/locationdata.h b/src/analyze/gui/locationdata.h
+index bfdb41a..930f139 100644
+--- a/src/analyze/gui/locationdata.h
++++ b/src/analyze/gui/locationdata.h
+@@ -75,7 +75,7 @@ struct hash<Symbol>
+ };
+ }
+ 
+-inline uint qHash(const Symbol& symbol, uint seed = 0)
++inline unsigned int qHash(const Symbol& symbol, unsigned int seed = 0)
+ {
+     QtPrivate::QHashCombine hash;
+     seed = hash(seed, symbol.functionId);
+@@ -83,7 +83,7 @@ inline uint qHash(const Symbol& symbol, uint seed = 0)
+     return seed;
+ }
+ 
+-inline uint qHash(const FileLine& location, uint seed = 0)
++inline unsigned int qHash(const FileLine& location, unsigned int seed = 0)
+ {
+     QtPrivate::QHashCombine hash;
+     seed = hash(seed, location.fileId);
+diff --git a/src/analyze/gui/parser.cpp b/src/analyze/gui/parser.cpp
+index 80f3558..d569da3 100644
+--- a/src/analyze/gui/parser.cpp
++++ b/src/analyze/gui/parser.cpp
+@@ -567,7 +567,7 @@ HistogramData buildSizeHistogram(ParserData& data, std::shared_ptr<const ResultD
+                                                {512, i18n("257B to 512B")},
+                                                {1024, i18n("512B to 1KB")},
+                                                {numeric_limits<uint64_t>::max(), i18n("more than 1KB")}};
+-    uint bucketIndex = 0;
++    size_t bucketIndex = 0;
+     row.size = buckets[bucketIndex].first;
+     row.sizeLabel = buckets[bucketIndex].second;
+     vector<MergedHistogramColumnData> columnData;
+diff --git a/src/util/pointermap.h b/src/util/pointermap.h
+index 2d11b35..a2bec55 100644
+--- a/src/util/pointermap.h
++++ b/src/util/pointermap.h
+@@ -60,7 +60,7 @@ struct AllocationInfoSet
+ 
+     bool add(uint64_t size, TraceIndex traceIndex, AllocationInfoIndex* allocationIndex)
+     {
+-        allocationIndex->index = static_cast<uint>(set.size());
++        allocationIndex->index = static_cast<uint32_t>(set.size());
+         IndexedAllocationInfo info = {size, traceIndex, *allocationIndex};
+         auto it = set.find(info);
+         if (it != set.end()) {
+diff --git a/tests/auto/tst_trace.cpp b/tests/auto/tst_trace.cpp
+index 78f6d00..ff87044 100644
+--- a/tests/auto/tst_trace.cpp
++++ b/tests/auto/tst_trace.cpp
+@@ -216,8 +216,8 @@ TEST_CASE ("symbolizing") {
+     REQUIRE(data.mod);
+ 
+     DwarfDieCache cache(data.mod);
+-    uint j = 0;
+-    for (uint i = 0; i < 6 + j; ++i) {
++    size_t j = 0;
++    for (size_t i = 0; i < 6 + j; ++i) {
+         auto addr = reinterpret_cast<Dwarf_Addr>(trace[i]);
+ 
+         auto cuDie = cache.findCuDie(addr);
+-- 
+2.52.0
+

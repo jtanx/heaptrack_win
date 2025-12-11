@@ -1,11 +1,11 @@
-From 496c25cc276aedcc2a49276804d6fb3663e71538 Mon Sep 17 00:00:00 2001
+From fb37ea3f7a8a1bd435ac2786eb2a9c9706be96b2 Mon Sep 17 00:00:00 2001
 From: Jeremy Tan <jtanx@outlook.com>
-Date: Thu, 11 Dec 2025 19:39:43 +1100
+Date: Thu, 11 Dec 2025 20:25:39 +1100
 Subject: [PATCH] Add path relocation
 
 
 diff --git a/src/analyze/gui/mainwindow.cpp b/src/analyze/gui/mainwindow.cpp
-index 85d3f69..5d2a16f 100644
+index 85d3f69..7c6cf2b 100644
 --- a/src/analyze/gui/mainwindow.cpp
 +++ b/src/analyze/gui/mainwindow.cpp
 @@ -63,6 +63,7 @@ const QString CodeNavigation() { return QStringLiteral("CodeNavigation"); }
@@ -66,7 +66,7 @@ index 85d3f69..5d2a16f 100644
 +            return;
 +        }
 +        for (int i = 0; i+1 < parts.size(); i += 2) {
-+            if (!QRegExp(parts.at(i)).isValid()) {
++            if (!QRegularExpression(parts.at(i)).isValid()) {
 +                showError(i18n("Path relocation regex was invalid: %1.", parts.at(i)));
 +                return;
 +            }
@@ -83,7 +83,7 @@ index 85d3f69..5d2a16f 100644
 +{
 +    const auto parts = settings.readEntry(Config::Entries::PathRelocation).split(QString::fromUtf8(";"));
 +    for (int i = 0; i+1 < parts.size(); i += 2) {
-+        QRegExp re(parts.at(i));
++        QRegularExpression re(parts.at(i));
 +        if (!re.isValid()) {
 +            continue;
 +        }
