@@ -10,8 +10,8 @@ echo "HEAPTRACK VERSION $HTVERSION"
 git -C heaptrack/ apply ../0001-Add-path-relocation.patch
 
 # Install kdiagram/kchart
-cmake -S kdiagram -B kdbuild -GNinja -DCMAKE_INSTALL_PREFIX=/d/heaptrack -DCMAKE_BUILD_TYPE=Release
-ninja -C kdbuild install
+# cmake -S kdiagram -B kdbuild -GNinja -DCMAKE_INSTALL_PREFIX=/d/heaptrack -DCMAKE_BUILD_TYPE=Release
+# ninja -C kdbuild install
 
 # Install heaptrack
 cmake -S heaptrack -B htbuild -GNinja -DCMAKE_INSTALL_PREFIX=/d/heaptrack -DCMAKE_BUILD_TYPE=Release

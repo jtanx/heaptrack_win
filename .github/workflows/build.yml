@@ -28,6 +28,7 @@ jobs:
             mingw-w64-ucrt-x86_64-extra-cmake-modules
             mingw-w64-ucrt-x86_64-gcc
             mingw-w64-ucrt-x86_64-icoutils
+            mingw-w64-ucrt-x86_64-kdiagram
             mingw-w64-ucrt-x86_64-kio
             mingw-w64-ucrt-x86_64-kitemmodels
             mingw-w64-ucrt-x86_64-ninja
