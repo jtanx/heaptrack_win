@@ -1,17 +1,14 @@
-From 483c705175835bd86009172943565ebd44b530ae Mon Sep 17 00:00:00 2001
+From fb37ea3f7a8a1bd435ac2786eb2a9c9706be96b2 Mon Sep 17 00:00:00 2001
 From: Jeremy Tan <jtanx@outlook.com>
-Date: Sun, 29 Aug 2021 22:03:27 +1000
-Subject: [PATCH 2/2] Add path relocation
+Date: Thu, 11 Dec 2025 20:25:39 +1100
+Subject: [PATCH] Add path relocation
 
----
- src/analyze/gui/mainwindow.cpp | 56 +++++++++++++++++++++++++++++-----
- 1 file changed, 49 insertions(+), 7 deletions(-)
 
 diff --git a/src/analyze/gui/mainwindow.cpp b/src/analyze/gui/mainwindow.cpp
-index 63a46a2..efd03fe 100644
+index 85d3f69..7c6cf2b 100644
 --- a/src/analyze/gui/mainwindow.cpp
 +++ b/src/analyze/gui/mainwindow.cpp
-@@ -73,6 +73,7 @@ const char CodeNavigation[] = "CodeNavigation";
+@@ -63,6 +63,7 @@ const QString CodeNavigation() { return QStringLiteral("CodeNavigation"); }
  namespace Entries {
  const char State[] = "State";
  const char CustomCommand[] = "CustomCommand";
@@ -19,7 +16,7 @@ index 63a46a2..efd03fe 100644
  const char IDE[] = "IDE";
  }
  }
-@@ -152,9 +153,6 @@ void addLocationContextMenu(QTreeView* treeView, MainWindow* window)
+@@ -163,9 +164,6 @@ void addLocationContextMenu(QTreeView* treeView, MainWindow* window)
          Q_ASSERT(resultData);
          const auto location = index.data(SourceMapModel::LocationRole).value<FileLine>();
          const auto file = resultData->string(location.fileId);
@@ -29,7 +26,7 @@ index 63a46a2..efd03fe 100644
          auto menu = new QMenu(treeView);
          auto openFile =
              new QAction(QIcon::fromTheme(QStringLiteral("document-open")), i18n("Open file in editor"), menu);
-@@ -168,8 +166,7 @@ void addLocationContextMenu(QTreeView* treeView, MainWindow* window)
+@@ -179,8 +177,7 @@ void addLocationContextMenu(QTreeView* treeView, MainWindow* window)
          Q_ASSERT(resultData);
          const auto location = index.data(SourceMapModel::LocationRole).value<FileLine>();
          const auto file = resultData->string(location.fileId);
@@ -39,7 +36,7 @@ index 63a46a2..efd03fe 100644
      });
  }
  
-@@ -801,6 +798,13 @@ void MainWindow::setupCodeNavigationMenu()
+@@ -825,6 +822,13 @@ void MainWindow::setupCodeNavigationMenu()
      menu->addAction(action);
  #endif
  
@@ -53,7 +50,7 @@ index 63a46a2..efd03fe 100644
      QObject::connect(group, &QActionGroup::triggered, this, &MainWindow::setCodeNavigationIDE);
  
      configAction->setMenu(menu);
-@@ -822,12 +826,44 @@ void MainWindow::setCodeNavigationIDE(QAction* action)
+@@ -846,12 +850,44 @@ void MainWindow::setCodeNavigationIDE(QAction* action)
              settings.writeEntry(Config::Entries::IDE, -1);
          }
          return;
@@ -69,7 +66,7 @@ index 63a46a2..efd03fe 100644
 +            return;
 +        }
 +        for (int i = 0; i+1 < parts.size(); i += 2) {
-+            if (!QRegExp(parts.at(i)).isValid()) {
++            if (!QRegularExpression(parts.at(i)).isValid()) {
 +                showError(i18n("Path relocation regex was invalid: %1.", parts.at(i)));
 +                return;
 +            }
@@ -86,7 +83,7 @@ index 63a46a2..efd03fe 100644
 +{
 +    const auto parts = settings.readEntry(Config::Entries::PathRelocation).split(QString::fromUtf8(";"));
 +    for (int i = 0; i+1 < parts.size(); i += 2) {
-+        QRegExp re(parts.at(i));
++        QRegularExpression re(parts.at(i));
 +        if (!re.isValid()) {
 +            continue;
 +        }
@@ -97,8 +94,8 @@ index 63a46a2..efd03fe 100644
 +
  void MainWindow::navigateToCode(const QString& filePath, int lineNumber, int columnNumber)
  {
-     const auto settings = m_config->group(Config::Groups::CodeNavigation);
-@@ -840,15 +876,21 @@ void MainWindow::navigateToCode(const QString& filePath, int lineNumber, int col
+     const auto settings = m_config->group(Config::Groups::CodeNavigation());
+@@ -865,15 +901,21 @@ void MainWindow::navigateToCode(const QString& filePath, int lineNumber, int col
          command = settings.readEntry(Config::Entries::CustomCommand);
      }
  
@@ -123,5 +120,5 @@ index 63a46a2..efd03fe 100644
  }
  
 -- 
-2.33.0
+2.52.0
 

@@ -1,5 +1,5 @@
 # heaptrack_win
-Winows builds of the heaptrack gui
+Windows builds of the heaptrack gui
 
 ## Code navigation commands
 
